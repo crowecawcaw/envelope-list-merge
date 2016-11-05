@@ -1,0 +1,51 @@
+<html>
+
+<head>
+  <style>
+    @page {
+      size: 9.5in 4.125in;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial;
+    }
+    .envelope {
+      width: 9.5in;
+      position: relative;
+    }
+    .from {
+      display: inline-block;
+      white-space: pre-line;
+    }
+    .logo {
+      display: inline-block;
+    }
+    .to {
+      white-space: pre-line;
+      position: absolute;
+      top: 1.5in;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+    @media screen {
+      .envelope {
+        border: 1px solid #000;
+        height: 4.125in;
+        margin: 10px;
+      }
+    }
+    @media print {
+      .envelope {
+          page-break-after: always;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="bundle.js"></script>
+</body>
+</html>
