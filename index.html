@@ -13,6 +13,7 @@
     .envelope {
       width: 9.5in;
       position: relative;
+      background-color: white;
     }
     .from {
       display: inline-block;
@@ -34,10 +35,17 @@
         height: 4.125in;
         margin: 10px;
       }
+      .previews {
+        background-color: #888;
+        zoom: .8;
+      }
     }
     @media print {
       .envelope {
           page-break-after: always;
+      }
+      .print-hide {
+        display: none;
       }
     }
 

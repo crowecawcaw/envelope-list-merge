@@ -49,8 +49,6 @@
 
 	'use strict';
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(/*! react */ 1);
@@ -66,8 +64,6 @@
 	var _papaparse2 = _interopRequireDefault(_papaparse);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -85,7 +81,12 @@
 	
 	    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 	
-	    _this.state = { addresses: null };
+	    _this.state = {
+	      addresses: [],
+	      address1Index: false,
+	      address2Index: false,
+	      address3Index: false
+	    };
 	    _this.drop = _this.drop.bind(_this);
 	    return _this;
 	  }
@@ -110,37 +111,61 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var envelopes = null;
+	      var _this3 = this;
 	
-	      var items = this.state.addresses == null ? null : this.state.addresses[0].map(function (text) {
+	      var options = this.state.addresses.length ? this.state.addresses[0].map(function (text) {
 	        return _react2.default.createElement(
 	          'option',
 	          { key: text },
 	          text
 	        );
-	      });
-	      var selection = _react2.default.createElement(
+	      }) : null;
+	
+	      var address1IndexSelection = _react2.default.createElement(
 	        'select',
-	        null,
-	        items
+	        { value: this.state.address1Index, onChange: function onChange(e) {
+	            return _this3.setState({ address1Index: e.target.value });
+	          } },
+	        options
+	      );
+	      var address2IndexSelection = _react2.default.createElement(
+	        'select',
+	        { value: this.state.address1Index, onChange: function onChange(e) {
+	            return _this3.setState({ address1Index: e.target.value });
+	          } },
+	        options
+	      );
+	      var address3IndexSelection = _react2.default.createElement(
+	        'select',
+	        { value: this.state.address1Index, onChange: function onChange(e) {
+	            return _this3.setState({ address1Index: e.target.value });
+	          } },
+	        options
 	      );
 	
 	      var envelopeTemplate = _react2.default.createElement(Envelope, {
-	        address1: selection,
-	        address2: selection,
-	        address3: selection,
+	        address1IndexSelection: address1IndexSelection,
+	        address2IndexSelection: address2IndexSelection,
+	        address3IndexSelection: address3IndexSelection,
 	        return1: 'Jane Doe',
 	        return2: '5678 Brompton St',
 	        return3: 'Houston, TX 77025'
 	      });
-	      var envelopes = this.state.addresses == null ? null : this.state.addresses.map(function (address) {
+	
+	      var envelopes = this.state.addresses.map(function (address) {
+	        return {
+	          Name: _this3.state.address1Index ? address[_this3.state.address1Index] : null,
+	          Address: _this3.state.address2Index ? address[_this3.state.address2Index] : null,
+	          City: _this3.state.address3Index ? address[_this3.state.address3Index] : null
+	        };
+	      }).map(function (address) {
 	        return _react2.default.createElement(Envelope, {
 	          address1: address.Name,
 	          address2: address.Address,
 	          address3: address.City,
-	          return1: 'Mathison Ingham',
-	          return2: '7300 Brompton St. Apt 4234',
-	          return3: 'Houston, TX 77025',
+	          return1: 'Return Addresss',
+	          return2: '1234 Brompton St. Apt 567',
+	          return3: 'Houston, TX 77005',
 	          key: address.Name
 	        });
 	      });
@@ -198,78 +223,6 @@
 	    )
 	  );
 	}
-	
-	var ContentEditable = function (_React$Component2) {
-	  _inherits(ContentEditable, _React$Component2);
-	
-	  function ContentEditable() {
-	    _classCallCheck(this, ContentEditable);
-	
-	    var _this3 = _possibleConstructorReturn(this, (ContentEditable.__proto__ || Object.getPrototypeOf(ContentEditable)).call(this));
-	
-	    _this3.emitChange = _this3.emitChange.bind(_this3);
-	    return _this3;
-	  }
-	
-	  _createClass(ContentEditable, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this4 = this;
-	
-	      var _props = this.props,
-	          tagName = _props.tagName,
-	          html = _props.html,
-	          onChange = _props.onChange,
-	          props = _objectWithoutProperties(_props, ['tagName', 'html', 'onChange']);
-	
-	      return _react2.default.createElement(tagName || 'div', _extends({}, props, {
-	        ref: function ref(e) {
-	          return _this4.htmlEl = e;
-	        },
-	        onInput: this.emitChange,
-	        onBlur: this.props.onBlur || this.emitChange,
-	        contentEditable: !this.props.disabled,
-	        dangerouslySetInnerHTML: { __html: html }
-	      }), this.props.children);
-	    }
-	  }, {
-	    key: 'shouldComponentUpdate',
-	    value: function shouldComponentUpdate(nextProps) {
-	      // We need not rerender if the change of props simply reflects the user's
-	      // edits. Rerendering in this case would make the cursor/caret jump.
-	      return (
-	        // Rerender if there is no element yet... (somehow?)
-	        !this.htmlEl
-	        // ...or if html really changed... (programmatically, not by user edit)
-	        || nextProps.html !== this.htmlEl.innerHTML && nextProps.html !== this.props.html
-	        // ...or if editing is enabled or disabled.
-	        || this.props.disabled !== nextProps.disabled
-	      );
-	    }
-	  }, {
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate() {
-	      if (this.htmlEl && this.props.html !== this.htmlEl.innerHTML) {
-	        // Perhaps React (whose VDOM gets outdated because we often prevent
-	        // rerendering) did not update the DOM. So we update it manually now.
-	        this.htmlEl.innerHTML = this.props.html;
-	      }
-	    }
-	  }, {
-	    key: 'emitChange',
-	    value: function emitChange(evt) {
-	      if (!this.htmlEl) return;
-	      var html = this.htmlEl.innerHTML;
-	      if (this.props.onChange && html !== this.lastHtml) {
-	        evt.target = { value: html };
-	        this.props.onChange(evt);
-	      }
-	      this.lastHtml = html;
-	    }
-	  }]);
-	
-	  return ContentEditable;
-	}(_react2.default.Component);
 	
 	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app'));
 
